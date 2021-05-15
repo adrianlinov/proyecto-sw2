@@ -1,0 +1,175 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+    font-size: 1.2rem;
+    line-height: 1.4em;
+    margin: none;
+}
+h1{
+    font-size: 2rem;
+    line-height: 1.3em;
+
+}
+.container{
+    width: 90%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.header{
+    background: #2f3542;
+    color: white;
+    padding: 2rem 0;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+}
+.header a{
+    color: white;
+    text-decoration: none;
+}
+.logo-nav-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.navigation ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.navigation ul li{
+    display: inline-block;
+}
+.logo{
+    letter-spacing: 5px;
+    font-size: 1.3em;
+}
+.navigation ul li a{
+    display: block;
+    padding: 0.5rem 1rem;
+    transition: all 0.4s linear;
+    border-radius: 5px;
+}
+.main{
+    padding-top: 8rem;
+}
+.navigation ul li a:hover{
+    background: rgb(82, 82, 82);
+}
+.menu-icon{
+    display: none;
+}
+
+@media only screen and (max-width: 767px){
+    .menu-icon{
+        display: block;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+    }
+    .navigation{
+        width: 100%;
+        margin-top: 1rem;
+    }
+    .navigation ul{
+        display: none;
+    }
+    .navigation ul.show{
+        display: block;
+    }
+    
+    
+    .navigation ul li{
+        display: block;
+    }
+    .logo{
+        letter-spacing: 5px;
+        font-size: 1.3em;
+    }
+    .navigation ul li a{
+        display: block;
+        padding: 0.5rem 0;
+        transition: all 0.4s linear;
+        border-radius: 5px;
+    }
+    .navigation ul li a:hover{
+        background: rgb(82, 82, 82);
+    }
+    
+}
+.img{
+    padding-top: 105px;
+    padding-bottom: 100px;
+}
+.img-header{
+    padding-top: 150px;
+    position: relative;
+    width: 100%;
+    height: 450px;
+    background: url(http://quadranslawandfinance.com/wp-content/uploads/2018/03/disposiciones-generales-de-contabilidad.jpg);
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+
+
+}
+
+.img-header .welcome{
+    position: relative;
+    top: -151px;
+    left: 0;
+    width: 100%;
+    height: 450px;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.img-header .welcome h1{
+        font-size: 50px;
+        color: #fff;
+        font-weight: 200;
+
+}
+
+.acerca-de{
+    width: 100%;
+    margin-top: 40px;
+
+}
+
+.acerca-de .info-container{
+        width: 80%;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        
+}
+
+.acerca-de .info-container h1{
+    font-size: 50px;
+    font-weight: 400;
+    color: vat(--black);
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 50px;
+}
+
+.content {
+    padding: 10px;
+    border: 2px solid #2f3542;
+    border-radius: 5px;
+}
+
+.acerca-de .info-container p{
+    text-align: center;
+    font-size: 17px;
+    color: vat(--black);
+    line-height: 35px;
+    margin: 10px 0px;
+    
+}

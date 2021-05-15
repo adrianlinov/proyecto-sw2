@@ -1,0 +1,101 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+    font-size: 1.2rem;
+    line-height: 1.4em;
+    margin: none;
+}
+h1{
+    font-size: 2rem;
+    line-height: 1.3em;
+
+}
+.container{
+    width: 90%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.header{
+    background: #2f3542;
+    color: white;
+    padding: 2rem 0;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+}
+.header a{
+    color: white;
+    text-decoration: none;
+}
+.logo-nav-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.navigation ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.navigation ul li{
+    display: inline-block;
+}
+.logo{
+    letter-spacing: 5px;
+    font-size: 1.3em;
+}
+.navigation ul li a{
+    display: block;
+    padding: 0.5rem 1rem;
+    transition: all 0.4s linear;
+    border-radius: 5px;
+}
+.main{
+    padding-top: 8rem;
+}
+.navigation ul li a:hover{
+    background: rgb(82, 82, 82);
+}
+.menu-icon{
+    display: none;
+}
+
+@media only screen and (max-width: 767px){
+    .menu-icon{
+        display: block;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+    }
+    .navigation{
+        width: 100%;
+        margin-top: 1rem;
+    }
+    .navigation ul{
+        display: none;
+    }
+    .navigation ul.show{
+        display: block;
+    }
+    
+    
+    .navigation ul li{
+        display: block;
+    }
+    .logo{
+        letter-spacing: 5px;
+        font-size: 1.3em;
+    }
+    .navigation ul li a{
+        display: block;
+        padding: 0.5rem 0;
+        transition: all 0.4s linear;
+        border-radius: 5px;
+    }
+    .navigation ul li a:hover{
+        background: rgb(82, 82, 82);
+    }
+    
+}

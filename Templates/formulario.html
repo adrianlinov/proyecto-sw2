@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto Software</title>
+  <link rel="stylesheet" href="../static/formulario.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="../static/formulario.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="container logo-nav-container">
+      <a href="#" class="logo">Roma Consulting</a>
+      <span class="menu-icon">Ver Menu</span>
+      <nav class="navigation">
+        <ul>
+          <li><a href="#">Inicio</a></li>
+          <li><a href="#">Nosotros</a></li>
+          <li><a href="#">Prestamos</a></li>
+          <li><a href="#">Contacto</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Dropdown
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#">Prestamos Personales</a>
+              <a class="dropdown-item" href="#">Prestamos ...</a>
+              <a class="dropdown-item" href="#">Prestamos ..1</a>
+            </div>
+        </ul>
+      </nav>
+    </div>
+
+  </header>
+
+
+
+  <main class="main">
+    <div class="container">
+      <h1>Solicita Nuestros Servicios</h1>
+
+    </div>
+
+
+    <form action="">
+      <h2>CONTACTO</h2>
+      <!-- TODO: SELECCIONAR SI ES EMPRESA O PERSONA NATURAL -->
+      <input type="text" name="Nombre" placeholder="Nombres Del Solicitante" id="Nombre" class="inpt">
+      <input type="text" name="Apellido" placeholder="Apellidos Del Solictante" id="Apellido" class="inpt">
+      <input type="text" name="Correo" placeholder="Correo de Contacto" class="inpt" id="Correo">
+      <input type="tel" name="Telefono" placeholder="Telefono" id="" class="inpt" id="Telefono">
+      <select class="form-select inpt" aria-label="Default select example" class="inpt" id="EsEmpresa">
+        <option value="False" selected>Persona Natural</option>
+        <option value="True"  >Empresa</option>
+      </select>
+      <input type="text" name="DNI" placeholder="DNI" id="DNI" class="inpt">
+      <input type="text" name="RUC" placeholder="RUC" id="RUC" class="inpt" hidden>
+      <input type="text" name="RazonSocial" placeholder="Razon Social" id="RazonSocial" class="inpt" hidden>
+      <!-- TODO: SELECCIONAR EL TIPO DE SERVICIO QUE SE OFRECE EN BASE A LA BASE DE DATOS QUE SE TIENE -->
+      <select class="form-select inpt" aria-label="Default select example" class="inpt" id="Ocupacion" name="Ocupacion">
+        <option value='Abogado'>Abogado</option>
+        <option value='Actor, Actriz, Artista, Director de Espectáculos'>Actor, Actriz, Artista, Director de Espectáculos</option>
+        <option value='Actuario'>Actuario</option>
+        <option value='Administrador'>Administrador</option>
+        <option value='Aduanero/Agente de Aduanas/Inspectores de Frontera'>Aduanero/Agente de Aduanas/Inspectores de Frontera</option>
+        <option value='Aeromozo/Azafata'>Aeromozo/Azafata</option>
+        <option value='Agente/Intermediario/Corredor Inmobiliario'>Agente/Intermediario/Corredor Inmobiliario</option>
+        <option value='Agente de Bolsa'>Agente de Bolsa</option>
+        <option value='Agente de Inmigración/Migración'>Agente de Inmigración/Migración</option>
+        <option value='Agente de Turismo/Viajes'>Agente de Turismo/Viajes</option>
+        <option value='Agente/Intermediario/Corredor de Seguros'>Agente/Intermediario/Corredor de Seguros</option>
+        <option value='Agricultor, Agrónomo, Agrologo, Arboricultor'>Agricultor, Agrónomo, Agrologo, Arboricultor</option>
+        <option value='albañil, Obrero de Construcción'>albañil, Obrero de Construcción</option>
+        <option value='Ama de Casa'>Ama de Casa</option>
+        <option value='Analista de Sistema y Computación'>Analista de Sistema y Computación</option>
+        <option value='Antropólogo, Arqueólogo y Etnólogo'>Antropólogo, Arqueólogo y Etnólogo</option>
+        <option value='Archivero'>Archivero</option>
+        <option value='Armador de Barco'>Armador de Barco</option>
+        <option value='Arquitecto'>Arquitecto</option>
+        <option value='Artesano'>Artesano</option>
+        <option value='Asistente Social'>Asistente Social</option>
+        <option value='Autor Literario, Escritor y Crmtico'>Autor Literario, Escritor y Crmtico</option>
+        <option value='Avicultor'>Avicultor</option>
+        <option value='Bacteriólogo, Farmacólogo, Biólogo, Científico'>Bacteriólogo, Farmacólogo, Biólogo, Científico</option>
+        <option value='Basurero/Barrendero'>Basurero/Barrendero</option>
+        <option value='Cajero'>Cajero</option>
+        <option value='Camarero/Barman/Mesero/Chef'>Camarero/Barman/Mesero/Chef</option>
+        <option value='Cambista, Compra/Venta de Moneda'>Cambista, Compra/Venta de Moneda</option>
+        <option value='Campesino'>Campesino</option>
+        <option value='Capataz'>Capataz</option>
+        <option value='Cargador'>Cargador</option>
+        <option value='Carpintero'>Carpintero</option>
+        <option value='Cartero'>Cartero</option>
+        <option value='Cerrajero'>Cerrajero</option>
+        <option value='Cobrador'>Cobrador</option>
+        <option value='Comerciante / Vendedor'>Comerciante / Vendedor</option>
+        <option value='Conductor, Chofer / Taxista'>Conductor, Chofer / Taxista</option>
+        <option value='Conserje/Portero/Guardián/Vigilante'>Conserje/Portero/Guardián/Vigilante</option>
+        <option value='Constructor'>Constructor</option>
+        <option value='Contador'>Contador</option>
+        <option value='Contratista'>Contratista</option>
+        <option value='Corte y Confección de Ropa/Fabricante de Prendas'>Corte y Confección de Ropa/Fabricante de Prendas</option>
+        <option value='Cosmetólogo, Peluquero y Barbero'>Cosmetólogo, Peluquero y Barbero</option>
+        <option value='Decorador, Dibujante, Publicista'>Decorador, Dibujante, Publicista</option>
+        <option value='Dentista / Odontólogo'>Dentista / Odontólogo</option>
+        <option value='Deportista Profesional, Atleta, Arbitro'>Deportista Profesional, Atleta, Arbitro</option>
+        <option value='Distribuidor'>Distribuidor</option>
+        <option value='Docente'>Docente</option>
+        <option value='Economista'>Economista</option>
+        <option value='Electricista'>Electricista</option>
+        <option value='Empleada(o) del hogar / Nana'>Empleada(o) del hogar / Nana</option>
+        <option value='Empresario Exportador/Empresario Importador'>Empresario Exportador/Empresario Importador</option>
+        <option value='Enfermero'>Enfermero</option>
+        <option value='Ensamblador'>Ensamblador</option>
+        <option value='Escultor'>Escultor</option>
+        <option value='Estudiante'>Estudiante</option>
+        <option value='Fotógrafo/Operadores cámara, cine y tv, locutor'>Fotógrafo/Operadores cámara, cine y tv, locutor</option>
+        <option value='Ganadero'>Ganadero</option>
+        <option value='Gasfitero'>Gasfitero</option>
+        <option value='Historiador'>Historiador</option>
+        <option value='Ingeniero'>Ingeniero</option>
+        <option value='Interprete, Traductor'>Interprete, Traductor</option>
+        <option value='Jardinero'>Jardinero</option>
+        <option value='Jockey'>Jockey</option>
+        <option value='Joyero y/o Platero / Orfebre'>Joyero y/o Platero / Orfebre</option>
+        <option value='Jubilado / Pensionista'>Jubilado / Pensionista</option>
+        <option value='Laboratorista (Técnico)'>Laboratorista (Técnico)</option>
+        <option value='Liquidador, Reclamaciones/Seguros'>Liquidador, Reclamaciones/Seguros</option>
+        <option value='Maquinista / Operador de maquinaria'>Maquinista / Operador de maquinaria</option>
+        <option value='Martillero / Subastador'>Martillero / Subastador</option>
+        <option value='Mayorista, comercio al por mayor'>Mayorista, comercio al por mayor</option>
+        <option value='Mecánico'>Mecánico</option>
+        <option value='Medico / Cirujano'>Medico / Cirujano</option>
+        <option value='Metalurgista'>Metalurgista</option>
+        <option value='Miembro de las Fuerzas Armadas'>Miembro de las Fuerzas Armadas</option>
+        <option value='Nutricionista'>Nutricionista</option>
+        <option value='Obrero / Operador'>Obrero / Operador</option>
+        <option value='Obstetriz'>Obstetriz</option>
+        <option value='Organizador de Eventos'>Organizador de Eventos</option>
+        <option value='Panadero / Pastelero'>Panadero / Pastelero</option>
+        <option value='Paramédico'>Paramédico</option>
+        <option value='Periodista'>Periodista</option>
+        <option value='Perito'>Perito</option>
+        <option value='Pescador'>Pescador</option>
+        <option value='Piloto'>Piloto</option>
+        <option value='Pintor'>Pintor</option>
+        <option value='Policía Municipal'>Policía Municipal</option>
+        <option value='Policía PNP'>Policía PNP</option>
+        <option value='Productor de Cine / Radio / Televisión / Teatro'>Productor de Cine / Radio / Televisión / Teatro</option>
+        <option value='Productor, Cultivos Extensivos'>Productor, Cultivos Extensivos</option>
+        <option value='Programador'>Programador</option>
+        <option value='Psicólogo / Terapeuta'>Psicólogo / Terapeuta</option>
+        <option value='Quiropráctico/Kinesiterapeuta (Kinesiólogos)'>Quiropráctico/Kinesiterapeuta (Kinesiólogos)</option>
+        <option value='Relacionista Publico e Industrial'>Relacionista Publico e Industrial</option>
+        <option value='Relojero'>Relojero</option>
+        <option value='Reparación de Automóviles, Pintor Retocador'>Reparación de Automóviles, Pintor Retocador</option>
+        <option value='Reparador de Aparatos Electrodomésticos'>Reparador de Aparatos Electrodomésticos</option>
+        <option value='Repartidor'>Repartidor</option>
+        <option value='Sacerdote/Monja'>Sacerdote/Monja</option>
+        <option value='Secretaria, Recepcionista, Telefonista'>Secretaria, Recepcionista, Telefonista</option>
+        <option value='Seguridad/Guardaespaldas/Guardia de Seguridad'>Seguridad/Guardaespaldas/Guardia de Seguridad</option>
+        <option value='Servicio de Almacenamiento/Almacenero'>Servicio de Almacenamiento/Almacenero</option>
+        <option value='Servicio de Alquiler de Vehículos'>Servicio de Alquiler de Vehículos</option>
+        <option value='Servicios de Alquiler de Videos, Equipos de Sonido'>Servicios de Alquiler de Videos, Equipos de Sonido</option>
+        <option value='Sociólogo'>Sociólogo</option>
+        <option value='Tasador'>Tasador</option>
+        <option value='Técnico'>Técnico</option>
+        <option value='Torero'>Torero</option>
+        <option value='Tramitador'>Tramitador</option>
+        <option value='Transporte de Carga y/o Mudanza'>Transporte de Carga y/o Mudanza</option>
+        <option value='Transportista'>Transportista</option>
+        <option value='Vendedor Ambulante'>Vendedor Ambulante</option>
+        <option value='Veterinario, Zoólogo, Zootécnico'>Veterinario, Zoólogo, Zootécnico</option>
+        <option value='Visitador Medico'>Visitador Medico</option>
+        <option value='Zapatero'>Zapatero</option>
+        <option value='No Declara'>No Declara</option>
+        <option value='Otros'>Otros</option>
+      </select>
+
+
+      <select class="form-select inpt" aria-label="Default select example" class="inpt" id="RubroEmpresarial" name="RubroEmpresarial" hidden>
+        <option value='Alimentos y Bebidas'>Alimentos y Bebidas</option>
+        <option value='Artesanías y Artes Manuales'>Artesanías y Artes Manuales</option>
+        <option value='Audiovisuales'>Audiovisuales</option>
+        <option value='Bebés y Niños'>Bebés y Niños</option>
+        <option value='Belleza y Relajación'>Belleza y Relajación</option>
+        <option value='Computación y equipo de Oficina'>Computación y equipo de Oficina</option>
+        <option value='Construcción y Agro'>Construcción y Agro</option>
+        <option value='Deportes y Defensa Personal'>Deportes y Defensa Personal</option>
+        <option value='Educación y Cultura'>Educación y Cultura</option>
+        <option value='ElectroHogar'>ElectroHogar</option>
+        <option value='Estado e Instituciones'>Estado e Instituciones</option>
+        <option value='Eventos y Animación'>Eventos y Animación</option>
+        <option value='Hogar y Jardín'>Hogar y Jardín</option>
+        <option value='Instrumentos y Equipos Musicales'>Instrumentos y Equipos Musicales</option>
+        <option value='Juegos y Entretenimiento'>Juegos y Entretenimiento</option>
+        <option value='Libros y Revistas'>Libros y Revistas</option>
+        <option value='Mascotas y Accesorios'>Mascotas y Accesorios</option>
+        <option value='Pasatiempos y coleccionables'>Pasatiempos y coleccionables</option>
+        <option value='Publicidad y Marketing'>Publicidad y Marketing</option>
+        <option value='Restaurantes y Diversión'>Restaurantes y Diversión</option>
+        <option value='Ropa, Calzado y Accesorios'>Ropa, Calzado y Accesorios</option>
+        <option value='Salud y Bienestar'>Salud y Bienestar</option>
+        <option value='Seguridad Industrial'>Seguridad Industrial</option>
+        <option value='Servicios Administrativos y Contables'>Servicios Administrativos y Contables</option>
+        <option value='Servicios en General'>Servicios en General</option>
+        <option value='Servicios Financieros'>Servicios Financieros</option>
+        <option value='Transporte y Aduanas'>Transporte y Aduanas</option>
+        <option value='Vehículos y Maquinaria'>Vehículos y Maquinaria</option>
+        <option value='Viajes y Turismo'>Viajes y Turismo</option>
+      </select>
+
+      <!-- TODO: INGRESOS EN UN SELECT PARA PERSONAS NATURALES -->
+
+      <!-- TODO: CAMPO PARA ADJUNTOS PARA PERSONAS JURIDICAS -->
+
+      <!-- TODO: DROPDOWN DE EMPLEADO O DESEMPLEADO -->
+      <select class="form-select inpt" aria-label="Default select example" class="inpt" id="Servicio" name="Servicio">
+        <!-- ESTO SE DEBE LLENAR CON LA BASE DE DATOS -->
+        <option selected value="false">Persona Natural</option>
+        <option value="true">Empresa</option>
+      </select>
+      
+      <!-- AGRANDAR EL CAMPO DE DESCRIPCION -->
+      <textarea name="DescripcionDeTrabajo" placeholder="Escriba aqui su mensaje" id="DescripcionDeTrabajo"
+        class="inpt"></textarea>
+      <textarea name="Mensaje" placeholder="Escriba aqui su mensaje" id="Mensaje" class="inpt"></textarea>
+      <button type="submit" id="boton">ENVIAR</button>
+    </form>
+  </main>
+
+  <footer class="bg-dark text-center text-white" style="margin-top: 20px;">
+    <!-- Grid container -->
+    <div class="container p-4 pb-0">
+      <!-- Section: Form -->
+      <section class="">
+        <form action="">
+          <!--Grid row-->
+          <div class="row d-flex justify-content-center">
+            <!--Grid column-->
+            <div class="col-auto">
+              <p class="pt-2">
+                <strong>Sign up for our newsletter</strong>
+              </p>
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-md-5 col-12">
+              <!-- Email input -->
+              <div class="form-outline form-white mb-4">
+                <input type="email" id="form5Example2" class="form-control" placeholder="Email Address" />
+
+              </div>
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-auto">
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-outline-light mb-4">
+                Subscribe
+              </button>
+            </div>
+            <!--Grid column-->
+          </div>
+          <!--Grid row-->
+        </form>
+      </section>
+      <!-- Section: Form -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+      © 2020 Copyright:
+      <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+
+  <script>
+    // function main() {
+    //   var oReq = new XMLHttpRequest()
+    //   oReq.open("GET", window.location.host + "formularioData", true);
+    //   oReq.onreadystatechange = function (evt) {
+    //     if (oReq.readyState == XMLHttpRequest.DONE && oReq.status == 200) {
+    //       var resp = oReq.responseText;
+    //       var jsLista = JSON.parse(resp);
+    //       console.log(jsLista);
+          
+          
+    //       }
+    //     }
+    //     oReq.send(null);
+    //   }
+      
+    //   window.onload = main;
+
+
+    document.getElementById("EsEmpresa").onchange = function () {
+      var e = document.getElementById("EsEmpresa");
+      var value = e.value;
+      if (value == "True") {
+        // mostrar los datos de empresa
+        console.log("ES EMPRESA")
+        document.getElementById("DNI").hidden = true;
+        document.getElementById("RUC").hidden = false;
+        document.getElementById("RazonSocial").hidden = false;
+        document.getElementById("Ocupacion").hidden = true;
+        document.getElementById("RubroEmpresarial").hidden = false;
+
+        
+      }
+      else {
+        console.log("NO ES EMPRESA")
+        // mostrar los datos de persona natural
+        document.getElementById("DNI").hidden = false;
+        document.getElementById("RUC").hidden = true;
+        document.getElementById("RazonSocial").hidden = true;
+        document.getElementById("Ocupacion").hidden = false;
+        document.getElementById("RubroEmpresarial").hidden = true;
+      }
+
+
+    }
+
+
+  </script>
+
+</body>
+
+</html>
