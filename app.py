@@ -13,9 +13,6 @@ db.init_app(app)
 
 
 
-db = SQLAlchemy(app)
-
-
 with app.app_context():
     db.create_all()
 
