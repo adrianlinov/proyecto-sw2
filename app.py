@@ -55,7 +55,7 @@ def operacionesRegistradasEndPoint():
     all_data = Data.query.all()
     for row in all_data: 
         print(row.name)
-    return render_template('dashboard.html', Data2=all_data)
+    return render_template('dashboard.html', Data=all_data)
 
 
 @app.route('/admin', methods=['POST'])
