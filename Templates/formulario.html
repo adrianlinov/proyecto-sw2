@@ -49,16 +49,16 @@
     </div>
 
 
-    <form action="">
+    <form action="/formulario" method="POST">
       <h2>CONTACTO</h2>
       <!-- TODO: SELECCIONAR SI ES EMPRESA O PERSONA NATURAL -->
       <input type="text" name="Nombre" placeholder="Nombres Del Solicitante" id="Nombre" class="inpt">
       <input type="text" name="Apellido" placeholder="Apellidos Del Solictante" id="Apellido" class="inpt">
       <input type="text" name="Correo" placeholder="Correo de Contacto" class="inpt" id="Correo">
       <input type="tel" name="Telefono" placeholder="Telefono" id="" class="inpt" id="Telefono">
-      <select class="form-select inpt" aria-label="Default select example" class="inpt" id="EsEmpresa">
-        <option value="False" selected>Persona Natural</option>
-        <option value="True"  >Empresa</option>
+      <select class="form-select inpt" aria-label="Default select example" class="inpt" id="EsEmpresa" name="EsEmpresa">
+        <option value="false" selected>Persona Natural</option>
+        <option value="true"  >Empresa</option>
       </select>
       <input type="text" name="DNI" placeholder="DNI" id="DNI" class="inpt">
       <input type="text" name="RUC" placeholder="RUC" id="RUC" class="inpt" hidden>

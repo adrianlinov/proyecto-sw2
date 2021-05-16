@@ -1,7 +1,7 @@
 
 from flask import Flask, render_template, request, redirect, session, json
 from flask import Flask
-from database import db, Data, Usuario
+from database import db, Cliente, Data, Usuario, Data, Valor, Cargo, Categoria, Campo
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -16,7 +16,6 @@ db.init_app(app)
 db = SQLAlchemy(app)
 
 
-
 with app.app_context():
     db.create_all()
 
@@ -29,14 +28,24 @@ def indexEndPoint():
 
 @app.route('/formulario')
 def formularioEndPoint():
+    
+    return render_template('formulario.html')
+
+
+@app.route('/formulario', methods=['POST'])
+def formularioPost():
     #colocar en el formulario la informacion necesaria
+    print(request.form.keys)
+    if request.form["EsEmpresa"] == "false":
+        nuevo = Cliente(nombre=request.form["Nombre"], apellido=request.form["Apellido"], empresa=request.form["EsEmpresa"], documento=request.form["DNI"], telefono=request.form["Telefono"])
+    else:
+        nuevo = Cliente(nombre=request.form["Nombre"], apellido=request.form["Apellido"], empresa=request.form["EsEmpresa"], documento=request.form["RUC"], telefono=request.form["Telefono"])
+    db.session.add(nuevo)
+    db.session.commit()
+
 
     return render_template('formulario.html')
 
-@app.route('/formularioData')
-def formularioDataEndPoint():
-    #colocar en el formulario la informacion necesaria
-    return render_template('formulario.html')
 
 @app.route('/admin')
 def adminLogInEndPoint():

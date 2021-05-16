@@ -15,7 +15,7 @@ class Data(db.Model):
     servicio = db.Column(db.String(100))
 
 
-class CampoCliente(db.Model):
+class Valor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     campo_id = db.Column(db.Integer, db.ForeignKey('campo.id'))
     cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id'))
@@ -37,6 +37,9 @@ class Cargo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100))
     usuario = db.relationship('Usuario', cascade="all,delete", backref="cargo")
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self._table_.columns}
     
 
 class Servicio(db.Model):
@@ -47,19 +50,30 @@ class Servicio(db.Model):
     categoria_id = db.Column(db.Integer, db.ForeignKey("categoria.id"))
     campo = db.relationship('Campo', cascade="all,delete", backref="servicio")
 
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self._table_.columns}
+
 
 class Categoria(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), unique=True)
     servicio = db.relationship('Servicio', cascade="all,delete", backref="categoria")
 
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self._table_.columns}
+
 class Cliente(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100))
     apellido = db.Column(db.String(100))
-    emmpresa = db.Column(db.Boolean)
+    correo = db.Column(db.String(100))
+    empresa = db.Column(db.String(10))
     documento = db.Column(db.String(100), unique=True)
     telefono = db.Column(db.String(15), unique=True)
+    valor = db.relationship('Valor', cascade="all,delete", backref="Cliente")
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self._table_.columns}
 
 class Campo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -67,4 +81,7 @@ class Campo(db.Model):
     tipo = db.Column(db.String(100))
     placeholder = db.Column(db.String(100))
     servicio_id = db.Column(db.Integer, db.ForeignKey("servicio.id"))
-    cliente = db.relationship('Cliente', secondary=CampoCliente, backref=db.backref('cliente', lazy= 'dynamic'))
+    valor = db.relationship('Valor', cascade="all,delete", backref="Campo")
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self._table_.columns}
