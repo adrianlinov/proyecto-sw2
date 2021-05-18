@@ -21,7 +21,9 @@
         <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Romma Consulting</a>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="/logout">Cerrar Sesión</a>
+                <a class="nav-link" href="/@app.route('/admin')
+                def adminLogInEndPoint():
+                    return render_template('login.html')">Cerrar Sesión</a>
             </li>
         </ul>
     </nav>
@@ -34,7 +36,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="/dashboard">
                                 <span data-feather="users"></span> Operaciones Registradas
-                            </a>
+                            </a>  
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/analistas">
@@ -60,15 +62,15 @@
                     </ul>
                     <!-- AQUI VA EL ENVIO DE COREOS MASIVOS -->
                     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>EMAIL MARKETING</span>
+                        <span>OTROS</span>
                         <a class="d-flex align-items-center text-muted" href="#">
                             <span data-feather="plus-circle"></span>
                         </a>
                     </h6>
                     <ul class="nav flex-column mb-2">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text"></span> Current month
+                            <a class="nav-link" href="/editar">
+                                <span data-feather="file-text"></span> Editar Servicios
                             </a>
                         </li>
                         <li class="nav-item">
@@ -121,20 +123,36 @@
                         </thead>
                         <tbody>
 
-                        {% for row in Data%}
-                        <tr>
-                            <td>{{row.id}}</td>
-                            <td>{{row.name}}</td>
-                            <td>{{row.apellido}}</td>
-                            <td>{{row.dni}}</td>
-                            <td>{{row.servicio}}</td>
-                        </tr>
-                        {% endfor %}
+                        {% for row in Cliente%}
+                        {% if row.usuario_id == None%}
 
+                        
+                        <tr>
+                            <form action="/Asignar_Analista" method="POST">
+                                <input type="text" name = "Id_Cliente" hidden value="{{row.id}}">
+                            <td >{{row.id}}</td>
+                            <td>{{row.nombre}}</td>
+                            <td>{{row.apellido}}</td>
+                            <td>{{row.documento}}</td>
+                            <td>{{row.servicio.nombre}}</td>
+                            
+                            <td>
+                                <select name="Id_Usuario">  
+                                    <option value=0>seleccione</option>
+                                    {%for i in Usuario%}                                     
+                                    <option value={{i.id}}>{{i.usuario}}</option>
+                                    {% endfor %}
+                                </select>
+                                
+                            <button type="submit" class="btn btn-primary">Asignar</button>
+                        </form>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
-
 
 
                 <!-- Modal -->
@@ -157,6 +175,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Save changes</button>
+                                        
                                     </div>
                                 </form>
                             </div>
@@ -166,10 +185,6 @@
             </div>
         </div>
     </div>
-
-
-
-
 
 
     <!-- Bootstrap core JavaScript

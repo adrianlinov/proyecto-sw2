@@ -28,6 +28,8 @@ class Usuario(db.Model):
     usuario = db.Column(db.String(100), unique=True)
     contrasena = db.Column(db.String(100))
     cargo_id = db.Column(db.Integer, db.ForeignKey("cargo.id"))
+    db.relationship('Cliente', cascade="all,delete", backref="usuario")
+
 
     def as_dict(self):
        return {c.name: getattr(self, c.name) for c in self._table_.columns}
@@ -49,11 +51,12 @@ class Servicio(db.Model):
     imagenURL = db.Column(db.Text)
     categoria_id = db.Column(db.Integer, db.ForeignKey("categoria.id"))
     campo = db.relationship('Campo', cascade="all,delete", backref="servicio")
+    cliente = db.relationship('Cliente', cascade="all,delete", backref="servicio")
 
     def as_dict(self):
        return {c.name: getattr(self, c.name) for c in self._table_.columns}
 
-
+       
 class Categoria(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), unique=True)
@@ -70,6 +73,8 @@ class Cliente(db.Model):
     empresa = db.Column(db.String(10))
     documento = db.Column(db.String(100), unique=True)
     telefono = db.Column(db.String(15), unique=True)
+    servicio_id = db.Column(db.Integer, db.ForeignKey("servicio.id"))
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"))
     valor = db.relationship('Valor', cascade="all,delete", backref="Cliente")
 
     def as_dict(self):
@@ -79,7 +84,6 @@ class Campo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), unique=True)
     tipo = db.Column(db.String(100))
-    placeholder = db.Column(db.String(100))
     servicio_id = db.Column(db.Integer, db.ForeignKey("servicio.id"))
     valor = db.relationship('Valor', cascade="all,delete", backref="Campo")
 

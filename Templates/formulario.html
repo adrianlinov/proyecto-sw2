@@ -184,7 +184,6 @@
         <option value='Otros'>Otros</option>
       </select>
 
-
       <select class="form-select inpt" aria-label="Default select example" class="inpt" id="RubroEmpresarial" name="RubroEmpresarial" hidden>
         <option value='Alimentos y Bebidas'>Alimentos y Bebidas</option>
         <option value='Artesanías y Artes Manuales'>Artesanías y Artes Manuales</option>
@@ -217,20 +216,24 @@
         <option value='Viajes y Turismo'>Viajes y Turismo</option>
       </select>
 
+
+      <!---select a la tabla-->
+      <select class="form-select inpt" aria-label="Default select example" class="inpt" id="name = 'servicio_cliente'" name="servicio_cliente">      
+      {% for row in Servicio%}
+      <option value= {{row.id}}  >{{row.nombre}}</option>
+      {% endfor %}
+      </select>
+
+      
       <!-- TODO: INGRESOS EN UN SELECT PARA PERSONAS NATURALES -->
 
       <!-- TODO: CAMPO PARA ADJUNTOS PARA PERSONAS JURIDICAS -->
 
-      <!-- TODO: DROPDOWN DE EMPLEADO O DESEMPLEADO -->
-      <select class="form-select inpt" aria-label="Default select example" class="inpt" id="Servicio" name="Servicio">
-        <!-- ESTO SE DEBE LLENAR CON LA BASE DE DATOS -->
-        <option selected value="false">Persona Natural</option>
-        <option value="true">Empresa</option>
-      </select>
-      
+
+    
       <!-- AGRANDAR EL CAMPO DE DESCRIPCION -->
-      <textarea name="DescripcionDeTrabajo" placeholder="Escriba aqui su mensaje" id="DescripcionDeTrabajo"
-        class="inpt"></textarea>
+      <textarea name="DescripcionDeTrabajo" placeholder="Describa sus actividades laborales" id="DescripcionDeTrabajo"
+        class="input"></textarea>
       <textarea name="Mensaje" placeholder="Escriba aqui su mensaje" id="Mensaje" class="inpt"></textarea>
       <button type="submit" id="boton">ENVIAR</button>
     </form>
@@ -308,7 +311,7 @@
     document.getElementById("EsEmpresa").onchange = function () {
       var e = document.getElementById("EsEmpresa");
       var value = e.value;
-      if (value == "True") {
+      if (value == "true") {
         // mostrar los datos de empresa
         console.log("ES EMPRESA")
         document.getElementById("DNI").hidden = true;
