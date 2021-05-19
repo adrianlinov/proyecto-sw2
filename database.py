@@ -7,12 +7,6 @@ db = SQLAlchemy()
 #TODO: CAMPOS DIFERENTES POR CADA SERVICIO
 #TODO: QUE SE MUESTREN LOS CLIENTES REGISTRADOS EN LA BANDEJA DE ADMINISTRACION
 
-class Data(db.Model):
-    id = db.Column(db.Integer,primary_key = True)
-    name =  db.Column(db.String(100))
-    apellido =  db.Column(db.String(100))
-    dni = db.Column(db.String(100))
-    servicio = db.Column(db.String(100))
 
 
 class Valor(db.Model):
@@ -28,7 +22,7 @@ class Usuario(db.Model):
     usuario = db.Column(db.String(100), unique=True)
     contrasena = db.Column(db.String(100))
     cargo_id = db.Column(db.Integer, db.ForeignKey("cargo.id"))
-    db.relationship('Cliente', cascade="all,delete", backref="usuario")
+    cliente = db.relationship('Cliente', cascade="all,delete", backref="usuario")
 
 
     def as_dict(self):
@@ -71,8 +65,8 @@ class Cliente(db.Model):
     apellido = db.Column(db.String(100))
     correo = db.Column(db.String(100))
     empresa = db.Column(db.String(10))
-    documento = db.Column(db.String(100), unique=True)
-    telefono = db.Column(db.String(15), unique=True)
+    documento = db.Column(db.String(100))
+    telefono = db.Column(db.String(15))
     servicio_id = db.Column(db.Integer, db.ForeignKey("servicio.id"))
     usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"))
     valor = db.relationship('Valor', cascade="all,delete", backref="Cliente")

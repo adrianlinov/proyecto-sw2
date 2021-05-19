@@ -26,7 +26,6 @@ def indexEndPoint():
 @app.route('/formulario')
 def formularioEndPoint():
     all_data = Servicio.query.all()
-
     return render_template('formulario.html', Servicio=all_data)
 
 @app.route('/editar_servicios', methods=['GET'])
@@ -35,7 +34,7 @@ def editarServiciosEndPoint():
     all_categorias = Categoria.query.all()
     return render_template('editarServicios.html', servicios=all_data, categorias=all_categorias)
 
-@app.route('/editar_servicio', methods=['POST', "GET"])
+@app.route('/editar_servicio', methods=['POST'])
 def editarServicioEndPoint():
     nombre = request.form["Nombre"]
     descripcion = request.form["Descripcion"]
@@ -48,12 +47,21 @@ def editarServicioEndPoint():
     servicio.categoria_id = categoria_id
     
     db.session.add(servicio)
-    db.session.commit()
-
-    
+    db.session.commit()    
     return redirect('/editar_servicios')
 
-@app.route('/nuevo_servicio', methods=['POST', 'GET'])
+@app.route('/operaciones_registradas', methods=['GET'])
+def operacionesRegistradasEndPoint():
+    all_data = Cliente.query.all()
+    print(all_data)
+    for row in all_data:
+        print(row.servicio)
+    all_data_usuario = db.session.query(Usuario).filter(Usuario.cargo_id == 1)      
+    print(all_data_usuario)
+    return render_template('dashboard.html', Cliente=all_data, Usuario = all_data_usuario)
+
+
+@app.route('/nuevo_servicio', methods=['POST'])
 def nuevoServicioEndPoint():
     nombre = request.form["Nombre"]
     descripcion = request.form["Descripcion"]
@@ -110,33 +118,28 @@ def formularioPost():
     return render_template('formulario.html')
 
 
-@app.route('/admin')
+@app.route('/admin', methods=['GET'])
 def adminLogInEndPoint():
     return render_template('login.html')
 
 
-@app.route('/analistas')
+@app.route('/analisis_de_credito', methods=['GET'])
 def analistasEndPoint():
-    return render_template('analistas.html')
+    if "userId" in session:
+        all_data = Cliente.query.all()
+        print(all_data)
+        for row in all_data:
+            print(row.servicio)
+        user = db.session.query(Usuario).filter(Usuario.id == session["userId"])[0]
+        print(user.id)
+        return render_template('analistas.html', Cliente=all_data, Usuario = user)
+    else:
+        return redirect("/")
 
 
-@app.route('/nosotros')
+@app.route('/nosotros', methods=['GET'])
 def nosotrosEndPoint():
     return render_template('nosotros.html')
-
-
-@app.route('/operaciones_registradas', methods=['GET'])
-def operacionesRegistradasEndPoint():
-    all_data = Cliente.query.all()
-    print(all_data)
-    for row in all_data:
-        print(row.servicio)
-
-    all_data_usuario = db.session.query(Usuario).filter(Usuario.cargo_id == 1)      
-    print(all_data_usuario)
-    return render_template('dashboard.html', Cliente=all_data, Usuario = all_data_usuario)
-
-    #RESULTADO = db.session.query(Usuario).filter(Usuario.cargo_id == 1)
 
 
 @app.route('/admin', methods=['POST'])
@@ -148,29 +151,30 @@ def submit():
             Usuario.usuario == usuario, Usuario.contrasena == contrasena)
         if (user.count() > 0):
             session["userId"] = user[0].id
+            print("USUARIO LOGEADO: " , session["userId"])
             return redirect('/operaciones_registradas')
         else:
             return redirect('/admin')
 
-@app.route('/Asignar_Analista', methods=['POST', 'GET'])
+
+
+@app.route('/Asignar_Analista', methods=['POST'])
 def Asignar_Analista():
-    Id_Usuario = request.form['Id_Usuario']
-    Id_Cliente = request.form['Id_Cliente']
-    print('Id_Usuario')
-    print('Id_Cliente')
-    #servicio_id = request.form["Servicio_id"]
-    
-    cliente = db.session.query(Cliente).filter(Cliente.id == Id_Cliente)[0]
-    cliente.usuario_id = Id_Usuario
-    
+    user = db.session.query(Usuario).filter(Usuario.id == request.form["Id_Usuario"])[0]
+    cliente = db.session.query(Cliente).filter(Cliente.id == request.form["Id_Cliente"])[0]
+    cliente.usuario = user
     db.session.add(cliente)
     db.session.commit()
     return redirect('/operaciones_registradas')
+    
+    
 
 
-#Redirect y RenderTemplate
-# TODO: CREAR DASHBOARD DE ADMINISTRADOR
-# TODO: HACER QUE LOS USUARIOS SE HAGAN CON LA BASE DE DATOS
+@app.route("/logout", methods=['GET'])
+def logOut():
+    session.pop("userId", None)
+    return redirect("/")
+
 
 if __name__ == '__main__':
     app.debug = True
