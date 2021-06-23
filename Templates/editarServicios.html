@@ -33,17 +33,17 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="/operaciones_registradas">
+                            <a class="nav-link" href="/comercial">
                                 <span data-feather="users"></span> Operaciones Registradas
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/analisis_de_credito">
+                            <a class="nav-link" href="/analistas">
                                 <span data-feather="layers"></span> Área de Análisis Crediticio
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="/comite">
                                 <span data-feather="send"></span> Comité
                             </a>
                         </li>
@@ -112,21 +112,21 @@
                                 <td>{{servicio.id}}</td>
                                 <td>{{servicio.nombre}}</td>
                                 <td>{{servicio.categoria.nombre}}</td>
-                                <td><button class="btn btn-sm btn-outline-secondary" data-toggle="modal"
-                                        data-target="#modalServicio{{servicio.id}}">Editar</button></td>
-                                <div class="modal fade" id="modalServicio{{servicio.id}}" tabindex="-1" role="dialog"
-                                    aria-labelledby="modalServicio{{servicio.id}}" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Editar Sericio</h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
+                                    <td><button class="btn btn-sm btn-outline-secondary" data-toggle="modal"
+                                            data-target="#modalServicio{{servicio.id}}">Editar</button></td>
+                                    <div class="modal fade" id="modalServicio{{servicio.id}}" tabindex="-1" role="dialog"
+                                        aria-labelledby="modalServicio{{servicio.id}}" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Editar Sericio</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
                                             <div class="modal-body">
-                                                <form method="POST" action="editar_servicio">
+                                                <form method="POST" action="editar_servicios">
                                                     <div class="modal-body">
                                                         <input type="text" hidden name="Servicio_id"
                                                             value="{{servicio.id}}">
@@ -149,13 +149,10 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <h6><label for="entidad_name">Descripción</label></h6>
-                                                            <textarea name="Descripcion"
+                                                            <textarea name="Descripcion" class="form-control"
                                                                 id="Descripcion">{{servicio.descripcion}}</textarea>
                                                         </div>
-                                                        <!-- <div class="form-group">
-                                                        <h6><label for="entidad_name">Imagen</label></h6>
-                                                        <input type="file" class="form-control" id="Descripcion" name="Descripcion">
-                                                    </div> -->
+                                                        
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -188,11 +185,11 @@
                                 <form method="POST" action="/nuevo_servicio">
                                     <div class="modal-body">
                                         <div class="form-group">
-                                            <h6><label for="entidad_name">Nombre</label></h6>
+                                            <h6><label for="Nombre">Nombre</label></h6>
                                             <input type="text" class="form-control" id="Nombre" name="Nombre">
                                         </div>
                                         <div class="form-group">
-                                            <h6><label for="entidad_name">Categoria</label></h6>
+                                            <h6><label for="Categoria">Categoria</label></h6>
                                             <select class="form-select inpt" aria-label="Default select example"
                                                 class="inpt" id="Categoria" name="Categoria">
                                                 {% for categoria in categorias%}
@@ -201,13 +198,25 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <h6><label for="entidad_name">Descripción</label></h6>
+                                            <h6><label for="Descripcion">Descripción</label></h6>
                                             <textarea name="Descripcion" id="Descripcion"></textarea>
                                         </div>
-                                        <!-- <div class="form-group">
-                                            <h6><label for="entidad_name">Imagen</label></h6>
-                                            <input type="file" class="form-control" id="Descripcion" name="Descripcion">
-                                        </div> -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-9">
+                                                    <h6>Campos De Formulario</h6>
+                                                </div>
+                                                <div class="col-3">
+                                                    <button class="btn btn-sm btn-outline-secondary" id="btAdd" type="button">Agregar</button>
+                                                </div>
+                                                
+                                            </div>
+                                            <span id="camposForm">
+
+                                            </span>
+                                            
+                                            
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -264,6 +273,16 @@
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>
         feather.replace()
+        
+        contador = 0;
+        btn = document.getElementById("btAdd")
+        btn.onclick = function(){
+        document.getElementById("camposForm").insertAdjacentHTML('beforeend', 
+        '<input type="text"  style="margin-bottom: 20px" class="form-control" id="new' + Nombre + '" name="new' + contador + '">'
+        );
+        contador++;
+        };
+        
     </script>
 
 </body>

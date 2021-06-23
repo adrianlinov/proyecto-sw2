@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../static/GRUPO MADERO TRANSPARENTE AZUL.ico">
+
+    <title>Romma Consulting</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="../static/dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Romma Consulting</a>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="/logout">Cerrar Sesión</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/comercial">
+                                <span data-feather="users"></span> Operaciones Registradas 
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/analistas">
+                                <span data-feather="layers"></span> Área de Análisis Crediticio
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/comite">
+                                <span data-feather="send"></span> Comité
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span data-feather="users"></span> Área Legal
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span data-feather="bar-chart-2"></span> Operaciones Completadas
+                            </a>
+                        </li>
+
+                    </ul>
+                    <!-- AQUI VA EL ENVIO DE COREOS MASIVOS -->
+                    <h6
+                        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>OTROS</span>
+                        <a class="d-flex align-items-center text-muted" href="#">
+                            <span data-feather="plus-circle"></span>
+                        </a>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/editar_servicios">
+                                <span data-feather="file-text"></span> Editar Servicios
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+
+            <div role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h1 class="h2">{{cliente.nombre}} {{cliente.apellido}}</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                    </div>
+                    
+                </div>
+                <!-- METER ESTO A UN FORM -->
+
+                <form action="/analisis" method="post">
+                    <textarea id="mytextarea" name="mytextarea"></textarea>
+                    <input type="text" name="clienteid" hidden value="{{cliente.id}}">
+                    <button type="submit" class="btn btn-primary" id="clientebt" style="margin-top: 20px;">Guardar</button>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+        feather.replace()
+    </script>
+    <script src="https://cdn.tiny.cloud/1/2y57d7j5ptq68abhip6hcm4h56mch6ye6z40k4uvzsxo2lba/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        var cod = `{{cliente.analisis | safe}}`;
+        tinyMCE.init({
+            selector: '#mytextarea',
+            height: $(window).width()/3,
+
+            setup: function (editor) {
+            editor.on('init', function (e) {
+                if (cod != "None") {
+                    tinyMCE.activeEditor.setContent(cod);
+                }
+                
+                if ({{editar}} == false){
+                    tinyMCE.activeEditor.mode.set("readonly");
+                    document.getElementById("clientebt")
+                }
+                
+            })
+    }
+        });
+      </script>
+</body>
+</html>

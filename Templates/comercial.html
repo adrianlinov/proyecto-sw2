@@ -33,17 +33,17 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="/operaciones_registradas">
+                            <a class="nav-link active" href="/comercial">
                                 <span data-feather="users"></span> Operaciones Registradas
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/analisis_de_credito">
+                            <a class="nav-link" href="/analistas">
                                 <span data-feather="layers"></span> Área de Análisis Crediticio
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="/comite">
                                 <span data-feather="send"></span> Comité
                             </a>
                         </li>
@@ -58,16 +58,29 @@
                             </a>
                         </li>
 
+
+                       
+                            
+                           
+                            
+
+
                     </ul>
                     <!-- AQUI VA EL ENVIO DE COREOS MASIVOS -->
+                    {% if UserLogueado.usuario == "administrador" %}
                     <h6
                         class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>OTROS</span>
+                        <span>Administrador</span>
                         <a class="d-flex align-items-center text-muted" href="#">
                             <span data-feather="plus-circle"></span>
                         </a>
                     </h6>
                     <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/editar_usuario">
+                                <span data-feather="file-text"></span> Crear Usuario
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/editar_servicios">
                                 <span data-feather="file-text"></span> Editar Servicios
@@ -75,6 +88,7 @@
                         </li>
 
                     </ul>
+                    {% endif %}
                 </div>
             </nav>
 
@@ -83,15 +97,7 @@
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                     <h1 class="h2">Operaciones Registradas</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
-                        <!-- <div class="btn-group mr-2">
-                            <button class="btn btn-sm btn-outline-secondary" data-toggle="modal"
-                                data-target="#exampleModal">Nuevo</button>
-                            <button class="btn btn-sm btn-outline-secondary">Importar</button>
-                        </div> -->
-                        <!-- <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                <span data-feather="calendar"></span>
-                This week
-              </button> -->
+
                     </div>
                 </div>
 
@@ -104,9 +110,10 @@
                                 <th># ID</th>
                                 <th>Nombre</th>
                                 <th>Apellido</th>
-                                <th>DNI</th>
+                                <th>Documento</th>
                                 <th>Servicio Solicitado</th>
                                 <th>Asignar</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -125,7 +132,7 @@
                                     <td>{{row.servicio.nombre}}</td>
 
                                     <td>
-                                        <select name="Id_Usuario">
+                                        <select name="Id_Usuario" class="form-select inpt">
                                             <option value=0>seleccione</option>
                                             {%for i in Usuario%}
                                             <option value={{i.id}}>{{i.usuario}}</option>
@@ -133,8 +140,9 @@
                                         </select>
 
                                         <button type="submit" class="btn btn-primary">Asignar</button>
-
                                     </td>
+                                    <!---SE CAMBIA EDITAR POR VER INFORMACION ED Y JEFF / CONSULTAR SI EL CAMBIO ESTA BIEN-->
+                                    <td><a href="/informacion-personal?cliente_id={{row.id}}">Ver Información</a></td>
                                 </form>
 
                             </tr>
