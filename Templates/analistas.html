@@ -48,26 +48,37 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="/legal">
                                 <span data-feather="users"></span> Área Legal
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="/completado">
                                 <span data-feather="bar-chart-2"></span> Operaciones Completadas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/rechazado">
+                                <span data-feather="bar-chart-2"></span> Operaciones Rechazadas
                             </a>
                         </li>
 
                     </ul>
                     <!-- AQUI VA EL ENVIO DE COREOS MASIVOS -->
+                    {% if UserLogueado.usuario == "administrador" %}
                     <h6
                         class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>OTROS</span>
+                        <span>Administrador</span>
                         <a class="d-flex align-items-center text-muted" href="#">
                             <span data-feather="plus-circle"></span>
                         </a>
                     </h6>
                     <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/editar_usuario">
+                                <span data-feather="file-text"></span> Crear Usuario
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/editar_servicios">
                                 <span data-feather="file-text"></span> Editar Servicios
@@ -75,6 +86,7 @@
                         </li>
 
                     </ul>
+                    {% endif %}
                 </div>
             </nav>
 
@@ -111,9 +123,9 @@
                         <tbody>
 
                             {% for row in Cliente%}
-                            {% if row.usuario_id != None%}
+                      
+                            {% if row.flg_comite == none %}
 
-                            
 
                             <tr>
                                 <form action="/Asignar_Analista" method="POST">
@@ -125,11 +137,13 @@
                                     <td>{{row.servicio.nombre}}</td>
 
                                     <td> 
-                                        <!-- COLOCAR LOS LINKS -->
-                                    <a href="/analisis?cliente_id={{row.id}}">Ver Información Del Cliente</a>
+                                    <a href="/informacion-personal?cliente_id={{row.id}}">Ver Información Del Cliente</a>
+                                    </td>
+                                    <td> 
+                                    <a href="/analisis?cliente_id={{row.id}}">Ver Analisis</a>
                                     </td>
                                     <td>
-                                    <a href="/analisis?cliente_id={{row.id}}&edit=true">Editar</a>
+                                    <a href="/analisis?cliente_id={{row.id}}&edit=true">Editar Analisis</a>
                                     </td>
                                 
 
@@ -140,8 +154,7 @@
   
 
                             </tr>
-       
-
+                            
                             {% endif %}
                             {% endfor %}
                         </tbody>

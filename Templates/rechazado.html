@@ -33,7 +33,7 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="/comercial">
+                            <a class="nav-link" href="/comercial">
                                 <span data-feather="users"></span> Operaciones Registradas
                             </a>
                         </li>
@@ -58,7 +58,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/rechazado">
+                            <a class="nav-link active" href="/rechazado">
                                 <span data-feather="bar-chart-2"></span> Operaciones Rechazadas
                             </a>
                         </li>
@@ -93,113 +93,56 @@
             <div role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                 <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Data Personal</h1>
+                    <h1 class="h2">Operaciones Rechazadas</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
-                        
+
                     </div>
                 </div>
+
+
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th># ID</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Documento</th>
+                                <th>Servicio Solicitado</th>
+                                <th>Información del Cliente </th>
+                                <th>Descargar Contrato</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {% for row in Cliente%}
+
+                            
+
+                            <tr>
                 
-                <!-- SI ES EMPRESA
-                REPRESENTANTE LEGAL
-                RAZON SOCIAL
-                RUBRO DE LA EMPRESA
-            
-            -->
-                
+                                    <td>{{row.id}}</td>
+                                    <td>{{row.nombre}}</td>
+                                    <td>{{row.apellido}}</td>
+                                    <td>{{row.documento}}</td>
+                                    <td>{{row.servicio.nombre}}</td>
+                                    <td> 
+                                        <a href="/informacion-personal?cliente_id={{row.id}}">Ver Información Del Cliente</a>
+                                    </td>
+                                    
+                                <td>
+                                    <a href="/descargarContrato?clienteid={{row.id}}" class="btn btn-primary">Descargar</a>
+                                </td>
+                                
 
-                <form>
-                    <div class="form-row">
-                      <div class="form-group col-md-12">
-                        <label for="email">Email</label>
-                        <input readonly type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{cliente.correo}}">
-                      </div>
-                      
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                          <label for="nobre">Nombres</label>
-                          <input readonly type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombres" value="{{cliente.nombre}}">
-                        </div>
-                        <div class="form-group col-md-4">
-                          <label for="apellido">Apellidos</label>
-                          <input readonly type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellidos" value="{{cliente.apellido}}">
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="telefono">Telefono</label>
-                            <input readonly type="text" class="form-control" id="telefono" name="telefono" placeholder="Nombre" value="{{cliente.telefono}}">
-                        </div>
-                    </div>
+                                    
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-                    {% if cliente.esEmpresa == "true" %}
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="documento">Razon Social</label>
-                            <input readonly type="text" class="form-control" id="documento" name="razonsocial" placeholder="Documento" value="{{cliente.razonSocial}}">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="rubro">Rubro de Trabajo</label>
-                            <input readonly type="text" class="form-control" id="rubro" name="rubro" placeholder="Nombre" value="{{cliente.Rubro.rubro}}">
-                        </div>
-                    </div>
-                    {% endif %}
-
-                    {% if cliente.esEmpresa == "false" %}
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="ocupacion">Ocupacion</label>
-                            <input readonly type="text" class="form-control" id="ocupacion" name="ocupacion" placeholder="ocupacion" value="{{cliente.Ocupacion.nombre | safe}}">
-                        </div>
-                    </div>
-                    {% endif %}
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="documento">Documento</label>
-                            <input readonly type="text" class="form-control" id="documento" name="documento" placeholder="Documento" value="{{cliente.documento}}">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="telefono">Telefono</label>
-                            <input readonly type="text" class="form-control" id="telefono" name="telefono" placeholder="Nombre" value="{{cliente.telefono}}">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label for="inputAddress">Direccion</label>
-                        <input readonly type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" value="{{cliente.direccion}}">
-                      </div>
-                    </div>
-                    <div class="form-row">
-                      <div class="form-group col-md-6">
-                        <label for="inputCity">Ciudad</label>
-                        <input readonly type="text" class="form-control" id="inputCity" value="{{cliente.ciudad}}">
-                      </div>
-                      <div class="form-group col-md-4">
-                        <label for="distrito">Distrito</label>
-                        <input readonly type="text" class="form-control" id="distrito" name="distrito" value="{{cliente.distrito}}">
-                      </div>
-                      <div class="form-group col-md-2">
-                        <label for="codigoPostal">Codigo Postal</label>
-                        <input readonly type="text" class="form-control" id="codigoPostal" name="codigoPostal" value="{{cliente.codigoPostal}}">
-                      </div>
-                    </div>
-                    {% for valor in valores%}
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="campo{{valor.Campo.id}}">{{valor.Campo.nombre}}</label>
-                            <input readonly type="text" class="form-control" id="campo{{valor.Campo.id}}" name="campo{{valor.Campo.id}}" value="{{valor.valor}}">
-                        </div>
-                      </div>
-                      {% endfor %}
-
-
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="exampleFormControlTextarea1">Comentario Del Cliente</label>
-                            <textarea readonly class="form-control" id="exampleFormControlTextarea1" rows="3">{{cliente.descripcion}}</textarea>
-                        </div>
-                      </div>
-                    <button type="submit" class="btn btn-primary" style="margin-bottom: 20px;" hidden>Guardar</button>
-                  </form>
-                
 
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
@@ -217,11 +160,12 @@
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <h6><label for="entidad_name">Nombre</label></h6>
-                                            <input readonly type="text" class="form-control" id="entidad_name" name="name">
+                                            <input type="text" class="form-control" id="entidad_name" name="name">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Save changes</button>
+
                                     </div>
                                 </form>
                             </div>

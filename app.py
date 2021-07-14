@@ -1,9 +1,12 @@
-from flask import Flask, render_template, request, redirect, session, json
+from flask import Flask, render_template, request, redirect, session, json, send_file
 from flask import Flask
-from database import db, Cliente, Usuario, Valor, Cargo, Categoria, Campo, Servicio, Ocupacion, Rubro, Clientescomite,EstadoSol
+from werkzeug.utils import secure_filename
+from database import db, Cliente, Usuario, Valor, Cargo, Categoria, Campo, Servicio, Ocupacion, Rubro, Clientescomite, EstadoSol, VotosComite
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from sqlalchemy import asc, desc
+from docx import Document
+from io import BytesIO
 
 app = Flask(__name__)
 app.secret_key = "a"
@@ -49,7 +52,7 @@ def editarServiciosEndPoint():
             all_categorias = Categoria.query.all()
             return render_template('editarServicios.html',
                                    servicios=all_data,
-                                   categorias=all_categorias)
+                                   categorias=all_categorias, UserLogueado=userLogueado)
         else:
             return redirect("/admin")
     else:
@@ -154,6 +157,9 @@ def ModificarUser():
         return redirect('/editar_usuario')
 
 
+
+
+
 @app.route('/EliminarUsuario')
 def eliminarUsuario():
     if "userId" in session:
@@ -195,9 +201,76 @@ def obtenerUsuario():
         return redirect("/admin")
 
 
+
+@app.route('/guardarmontoaceptado', methods=['POST'])
+def guardarmontoaceptado():
+    if "userId" in session:
+        userLogueado = db.session.query(Usuario).filter(
+            Usuario.id == session["userId"])[0]
+        if userLogueado.cargo_id == 5:
+            print("entro al comite")
+            id_cliente = request.form['idCliente']
+            result = request.form['resultado']
+            usercomite = userLogueado.id 
+            flgvotoemitido = "S"
+            usuarioanalista = request.form['idUsuarioAnalista']
+
+            if db.session.query(VotosComite).filter(VotosComite.idCliente == id_cliente, VotosComite.idComite == userLogueado.id).count() <= 0:
+                nuevo = VotosComite(
+                idCliente = id_cliente, 
+                idComite = usercomite, 
+                resultado = result, 
+                flg_votoemitido = flgvotoemitido, 
+                idAnalista = usuarioanalista
+                )
+                db.session.add(nuevo)
+                db.session.commit()
+                
+            else:
+                votoPrevio = db.session.query(VotosComite).filter(VotosComite.idCliente == id_cliente, VotosComite.idComite == userLogueado.id)[0]
+                votoPrevio.resultado = result
+                db.session.add(votoPrevio)
+                db.session.commit()
+                
+
+
+            
+
+            cliente = db.session.query(Cliente).filter(Cliente.id == id_cliente)[0]
+            cantidadDeVotosAlCliente = db.session.query(VotosComite).filter(VotosComite.idCliente == id_cliente).count()
+            cantidadDeUsuariosComite = db.session.query(Usuario).filter(Usuario.cargo_id == 5).count()
+
+            if cantidadDeVotosAlCliente >= cantidadDeUsuariosComite:
+                # se completo la cantidad de votos necesarios para validar
+                numeroDeVotosAprobados = db.session.query(VotosComite).filter(VotosComite.idCliente == id_cliente, VotosComite.resultado == "APROBADO").count()
+                numeroDeVotosRechazado = db.session.query(VotosComite).filter(VotosComite.idCliente == id_cliente, VotosComite.resultado == "RECHAZADO").count()
+                if numeroDeVotosAprobados > numeroDeVotosRechazado:
+                    
+                    cliente.aprobado = "true"
+                    db.session.add(cliente)
+                    db.session.commit()
+                    # enviar al area legal
+                    return redirect('/comite')
+                else: 
+                    pass
+                    cliente.aprobado = "false"
+                    db.session.add(cliente)
+                    db.session.commit()
+                    # rechazar usuario
+                    return redirect('/comite')
+
+            else:
+                return redirect('/comite')
+        else:
+            return redirect("/admin")
+    else:
+        return redirect("/admin")
+
 @app.route('/informacion-personal')
 def editarInformacionPersonalEndPoint():
     if "userId" in session:
+        userLogueado = db.session.query(Usuario).filter(
+            Usuario.id == session["userId"])[0]
         cliente = db.session.query(Cliente).filter(
             Cliente.id == request.args.get("cliente_id"))[0]
         valores = db.session.query(Valor).filter(
@@ -205,7 +278,7 @@ def editarInformacionPersonalEndPoint():
         print(valores)
         return render_template('data-personal.html',
                                cliente=cliente,
-                               valores=valores)
+                               valores=valores, UserLogueado=userLogueado)
     else:
         session.pop("userId", None)
         return redirect("/admin")
@@ -265,6 +338,8 @@ def formularioPost():
     ciudad = request.form['Ciudad']
     codigoPostal = request.form['CodigoPostal']
     rubroEmpresarial = request.form['RubroEmpresarial']
+    montoSolicitado = request.form['MontoSolicitado']
+    descripcion = request.form["Mensaje"]
 
     aux = None
     print(request.form)
@@ -281,7 +356,10 @@ def formularioPost():
                         direccion=direccion,
                         ciudad=ciudad,
                         distrito=distrito,
-                        codigoPostal=codigoPostal)
+                        codigoPostal=codigoPostal,
+                        montoSolicitado = montoSolicitado,
+                        descripcion = descripcion)
+                        
     else:
         documento = request.form['RUC']
         nuevo = Cliente(nombre=nombre,
@@ -296,7 +374,9 @@ def formularioPost():
                         direccion=direccion,
                         ciudad=ciudad,
                         distrito=distrito,
-                        codigoPostal=codigoPostal)
+                        codigoPostal=codigoPostal,
+                        montoSolicitado = montoSolicitado)
+                        
     print("IDDD")
     print(nuevo.id)
     db.session.add(nuevo)
@@ -327,64 +407,62 @@ def adminLogInEndPoint():
 @app.route('/analistas', methods=['GET'])
 def analistasEndPoint():
     if "userId" in session:
-        clientes_comite = Clientescomite.query.all()
+        UserLogueado = db.session.query(Usuario).filter(Usuario.id == session["userId"])[0]
+        clientes_comite = Cliente.query.all()
         lista = []
         for i in clientes_comite:
-            lista.append(i.idCliente)
+           lista.append(i.id)
         print(lista)
         all_data = db.session.query(Cliente).filter(
-            Cliente.usuario_id == session["userId"], ~Cliente.id.in_(lista))
+           Cliente.usuario_id == session["userId"], Cliente.id.in_(lista))
         for row in all_data:
-            print(row)
+           print(row)
+           print(row.usuario_id)
+        
         user = db.session.query(Usuario).filter(
             Usuario.id == session["userId"])[0]
         return render_template('analistas.html',
                                Cliente=all_data,
-                               Usuario=user,
-                               ClientesEnviadosComite = clientes_comite)
+                               Usuario=user, UserLogueado=UserLogueado)
         # SI SE LOGUEA EL ADMIN DEBERIA PODER VER A TODOS LOS CLINTES QUE ESTAN DISPONIBLES PARA ANALISIS
     else:
         session.pop("userId", None)
         return redirect("/admin")
 
 
-
-
 @app.route('/comite', methods=['GET'])
 def ListarUsuariosEnviadosComite():
     if "userId" in session:
-        clientes_comite = Clientescomite.query.all()
-        lista = []
-        for i in clientes_comite:
-            lista.append(i.idCliente)
-        all_data = db.session.query(Cliente).filter(Cliente.id.in_(lista))
-        return render_template('comite.html',Cliente=all_data)
+        UserLogueado = db.session.query(Usuario).filter(Usuario.id == session["userId"])[0]
+        clientes_comite = db.session.query(Cliente).filter(Cliente.aprobado == None)
+        #all_data = db.session.query(Cliente).filter(Cliente.id.in_(lista))
+        #all_data = db.session.query(Cliente).filter(Cliente.flg_comite == "S", ~Cliente.id.in_(lista))
+        votos = VotosComite.query.all() 
+        return render_template('comite.html', Cliente=clientes_comite, VotosEmitidos = votos, UserLogueado=UserLogueado)
         # SI SE LOGUEA EL ADMIN DEBERIA PODER VER A TODOS LOS CLIENTES QUE ESTAN DISPONIBLES PARA ANALISIS
     else:
         session.pop("userId", None)
         return redirect("/admin")
 
 
-
-
 @app.route('/GuardarVoto', methods=['POST'])
 def GuardarVoto():
     if "userId" in session:
-        userLogueado = session["userId"]
-        id_cliente = request.form["idCliente"]
-        nuevo = Clientescomite(idComite =userLogueado,
-                            idCliente=id_cliente)
-        db.session.add(nuevo)
-        db.session.commit()
-        return redirect('/analistas')
-
-
+        userLog = db.session.query(Usuario).filter(Usuario.id == session["userId"])[0]
+        if (userLog.cargo_id == 5 or userLog.cargo_id == 1):
+            userLogueado = session["userId"]
+            id_cliente = request.form["idCliente"]
+            nuevo = Clientescomite(idComite=userLogueado, idCliente=id_cliente)
+            db.session.add(nuevo)
+            db.session.commit()
+            return redirect('/analistas')
+        else:
+            session.pop("userId", None)
+            return redirect("/admin")
         # SI SE LOGUEA EL ADMIN DEBERIA PODER VER A TODOS LOS CLINTES QUE ESTAN DISPONIBLES PARA ANALISIS
     else:
         session.pop("userId", None)
         return redirect("/admin")
-
-
 
 
 @app.route('/analisis', methods=['GET'])
@@ -399,13 +477,13 @@ def analisisEndPoint():
                 Cliente.id == request.args.get("cliente_id"))[0]
             return render_template('analisis.html',
                                    cliente=cliente,
-                                   editar="true")
+                                   editar="true", UserLogueado=userLogueado)
         else:
             cliente = db.session.query(Cliente).filter(
                 Cliente.id == request.args.get("cliente_id"))[0]
             return render_template('analisis.html',
                                    cliente=cliente,
-                                   editar="false")
+                                   editar="false", UserLogueado=userLogueado)
     else:
         session.pop("userId", None)
         return redirect("/admin")
@@ -425,13 +503,13 @@ def analisisEndPointPost():
             db.session.commit()
             return render_template('analisis.html',
                                    cliente=cliente,
-                                   editar="true")
+                                   editar="true", UserLogueado=userLogueado)
         else:
             cliente = db.session.query(Cliente).filter(
                 Cliente.id == request.form["clienteid"])[0]
             return render_template('analisis.html',
                                    cliente=cliente,
-                                   editar="false")
+                                   editar="false", UserLogueado=userLogueado)
     else:
         session.pop("userId", None)
         return redirect("/admin")
@@ -495,22 +573,179 @@ def Asignar_Analista():
             return redirect('/admin')
 
 
-
-
 @app.route('/EnviarComite')
 def Enviar_comite():
     if "userId" in session:
         userLogueado = session["userId"]
         id_cliente = request.args.get("cliente_id")
         print(userLogueado)
-        nuevo = Clientescomite(idAnalista=userLogueado,
-                            idCliente=id_cliente)
-        db.session.add(nuevo)
+        cliente_encontrado = db.session.query(Cliente).filter(Cliente.id == id_cliente)[0]
+        cliente_encontrado.flg_comite = "S"
+        db.session.add(cliente_encontrado)
         db.session.commit()
         return redirect('/analistas')
     else:
         session.pop("userId", None)
         return redirect('/admin')
+
+
+@app.route('/legal', methods=['GET'])
+def legalEndPoint():
+    if "userId" in session:
+        userLogueado2 = db.session.query(Usuario).filter(
+            Usuario.id == session["userId"])[0]
+        userLogueado = session["userId"]
+        all_data = db.session.query(Cliente).filter(Cliente.aprobado == "true", Cliente.completado == None)
+        print(all_data)
+        for row in all_data:
+            print(row.completado)
+        all_data_usuario = db.session.query(Usuario).filter(
+            Usuario.cargo_id == 4)
+        return render_template('legal.html', UserLogueado=userLogueado2, Cliente=all_data,
+                               Usuario=all_data_usuario)
+    else:
+        session.pop("userId", None)
+        return redirect('/admin')
+
+@app.route('/generar-contrato', methods=['POST'])
+def generarContratoPoint():
+    print("generar contrato")
+    if "userId" in session:
+        userLogueado = session["userId"]
+        cliente = db.session.query(Cliente).filter(
+                Cliente.id == request.form["clienteid"])[0]
+        # Debe contar con un IF para seleccionar el tipo de contrato deseado, en caso sea Persona Natural o Juridica
+        # Debe hacer el cambio con los parametros de cada cliente
+        print(cliente.__dict__.keys())
+
+        document = None
+        if cliente.esEmpresa == True:
+            document = Document('Contrato - Empresa.docx')  
+        else:
+            document = Document('Contrato - Persona.docx')
+        for key in cliente.__dict__.keys():
+            print("{" + key + "}")
+            palabra = "{" + key + "}"
+            remplazo = str(cliente.__dict__[key])
+            for paragraph in document.paragraphs:
+                if palabra in paragraph.text:
+                    paragraph.text = paragraph.text.replace(palabra, remplazo)
+            for table in document.tables:
+                for row in table.rows:
+                    for cell in row.cells:
+                        for paragraph in cell.paragraphs:
+                            if palabra in paragraph.text:
+                                print(paragraph.text)
+                                paragraph.text = paragraph.text.replace(palabra, remplazo)
+
+        # El nombre del documento retornado debe ser con el nombre del cliente
+
+        if cliente.esEmpresa == True:
+            document.save('Contrato - Empresa - {}.docx'.format(cliente.razonSocial))    
+            return send_file('Contrato - Empresa - {}.docx'.format(cliente.razonSocial))
+        else:
+            document.save('Contrato - Persona - {}.docx'.format(cliente.nombre))    
+            return send_file('Contrato - Persona - {}.docx'.format(cliente.nombre))
+    else:
+        session.pop("userId", None)
+        return redirect('/admin')
+
+
+
+
+
+@app.route('/cargar-contrato', methods=['POST'])
+def cargarContrato():
+    if "userId" in session:
+        userLogueado = session["userId"]
+        cliente = db.session.query(Cliente).filter(
+                Cliente.id == request.form["clienteid"])[0]
+        contratoCargado = request.files["contrato"].read()
+        cliente.contrato = contratoCargado
+        db.session.add(cliente)
+        db.session.commit()
+        return redirect('/legal')
+    else:
+        session.pop("userId", None)
+        return redirect('/admin')
+
+
+@app.route('/descargarContrato', methods=['GET'])
+def descargarContrato():
+    if "userId" in session:
+        userLogueado = session["userId"]
+        cliente = db.session.query(Cliente).filter(Cliente.id == request.args.get("clienteid"))[0]
+
+        return send_file(BytesIO(cliente.contrato) ,as_attachment=True, attachment_filename="Contrato - {}.docx".format(cliente.nombre))
+    
+    else:
+        session.pop("userId", None)
+        return redirect('/admin')
+
+
+@app.route('/completarCliente', methods=['GET'])
+def completarCliente():
+    if "userId" in session: 
+        userLogueado = session["userId"]
+        cliente = db.session.query(Cliente).filter(Cliente.id == request.args.get("clienteid"))[0]
+        cliente.completado = "true"
+        db.session.add(cliente)
+        db.session.commit()
+        return redirect("/legal")
+    
+    else:
+        session.pop("userId", None)
+        return redirect('/admin')
+
+
+
+
+@app.route('/completado', methods=['GET'])
+def completadoEndPoint():
+    if "userId" in session:
+        userLogueado2 = db.session.query(Usuario).filter(
+            Usuario.id == session["userId"])[0]
+        userLogueado = session["userId"]
+        all_data = db.session.query(Cliente).filter(Cliente.completado == "true")
+        for row in all_data:
+            print(row.servicio)
+        all_data_usuario = db.session.query(Usuario).filter(
+            Usuario.cargo_id == 4)
+        return render_template('completado.html', UserLogueado=userLogueado2, Cliente=all_data,
+                               Usuario=all_data_usuario)
+    else:
+        session.pop("userId", None)
+        return redirect('/admin')
+
+
+
+@app.route('/rechazado', methods=['GET'])
+def rechazadoEndPoint():
+    if "userId" in session:
+        userLogueado2 = db.session.query(Usuario).filter(
+            Usuario.id == session["userId"])[0]
+        userLogueado = session["userId"]
+        all_data = db.session.query(Cliente).filter(Cliente.aprobado == "false")
+        for row in all_data:
+            print(row.servicio)
+        all_data_usuario = db.session.query(Usuario).filter(
+            Usuario.cargo_id == 4)
+        return render_template('rechazado.html', UserLogueado=userLogueado2, Cliente=all_data,
+                               Usuario=all_data_usuario)
+    else:
+        session.pop("userId", None)
+        return redirect('/admin')
+
+@app.route('/inServicio', methods=['GET'])
+def inServicioEndpoint():
+    servicio = db.session.query(Servicio).filter(Servicio.id == request.args.get("servicioid"))[0]
+    print(servicio)
+    return render_template("inServicio.html", servicio=servicio)
+
+
+
+
+
 
 
 
@@ -523,4 +758,4 @@ def logOut():
 
 if __name__ == '__main__':
     app.debug = True
-    app.run()
+    app.run(host='0.0.0.0', port=80)
